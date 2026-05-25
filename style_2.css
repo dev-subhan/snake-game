@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary-color: #080c14;
+    --text-primary-color: #c8d8f0;
+    --border-primary-color: #0ff;
+    --cp-cyan: #00f5ff;
+    --cp-orange: #ff6b00;
+    --cp-purple: #9b30ff;
+    --cp-dark: #0a0f1e;
+    --cp-panel: #0d1526;
+    --cp-grid: rgba(0, 245, 255, 0.07);
+    --cp-snake: #00f5ff;
+    --cp-food: #ff6b00;
+}
+
+html, body, main {
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-primary-color);
+    color: var(--text-primary-color);
+    font-family: 'Share Tech Mono', monospace;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,245,255,0.02) 3px, rgba(0,245,255,0.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,245,255,0.02) 3px, rgba(0,245,255,0.02) 4px);
+    pointer-events: none;
+    z-index: 9997;
+}
+
+section {
+    padding: 20px 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    section { height: 70%; }
+}
+
+section .infos {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.info {
+    flex: 1;
+    border: 1px solid var(--cp-cyan);
+    border-top: 3px solid var(--cp-cyan);
+    border-radius: 0 0 4px 4px;
+    padding: 10px 14px;
+    background: var(--cp-panel);
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(0, 245, 255, 0.6);
+    text-transform: uppercase;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+.info h3 {
+    font-weight: 400;
+    font-size: 9px;
+    margin-bottom: 4px;
+}
+
+.info span {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cp-cyan);
+    letter-spacing: 3px;
+    margin-top: 2px;
+}
+
+.board {
+    border: 1px solid rgba(0, 245, 255, 0.4);
+    border-top: 3px solid var(--cp-cyan);
+    flex-grow: 1;
+    margin: 12px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
+    background-color: #060a12;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.block {
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--cp-grid);
+}
+
+.snake-segment {
+    background-color: var(--cp-cyan);
+    box-shadow: 0 0 8px var(--cp-cyan);
+    border-color: rgba(0, 245, 255, 0.2);
+}
+
+.food {
+    background-color: var(--cp-orange);
+    border-color: transparent;
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--cp-orange);
+    animation: dataPulse 0.6s ease-in-out infinite alternate;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+@keyframes dataPulse {
+    from { box-shadow: 0 0 6px var(--cp-orange); opacity: 0.85; }
+    to   { box-shadow: 0 0 18px var(--cp-orange), 0 0 30px rgba(255,107,0,0.4); opacity: 1; }
+}
+
+.modal {
+    backdrop-filter: blur(8px);
+    background: rgba(6, 10, 18, 0.85);
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-hidden,
+.game-over-hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--cp-panel);
+    color: var(--text-primary-color);
+    padding: 28px 28px 24px;
+    max-width: 480px;
+    width: calc(100% - 48px);
+    border: 1px solid var(--cp-cyan);
+    border-top: 3px solid var(--cp-cyan);
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.modal-content h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cp-cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.modal-info {
+    font-size: 11px;
+    color: rgba(200, 216, 240, 0.65);
+    line-height: 1.9;
+    margin-bottom: 14px;
+}
+
+.modal-list {
+    margin: 0 0 20px 16px;
+    font-size: 10px;
+    line-height: 2.2;
+    color: rgba(200, 216, 240, 0.55);
+}
+
+.modal-list li strong {
+    color: var(--cp-orange);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-start,
+.btn-high-score,
+.btn-snake-speed,
+.btn-theme {
+    background: transparent;
+    color: var(--cp-cyan);
+    border: 1px solid var(--cp-cyan);
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-start:hover,
+.btn-high-score:hover,
+.btn-snake-speed:hover,
+.btn-theme:hover {
+    background: rgba(0, 245, 255, 0.12);
+    color: #fff;
+}
+
+.btn-start:active,
+.btn-high-score:active,
+.btn-snake-speed:active,
+.btn-theme:active {
+    transform: translateY(1px);
+    background: rgba(0, 245, 255, 0.2);
+}
+
+.dpad { display: none; }
+
+@media (max-width: 768px) {
+    .dpad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--cp-cyan);
+    background: rgba(0, 245, 255, 0.05);
+    color: var(--cp-cyan);
+    font-size: 20px;
+    cursor: pointer;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.btn:active {
+    transform: scale(0.92);
+    background: rgba(0, 245, 255, 0.2);
+}
+
+.middle {
+    display: flex;
+    gap: 8px;
+}
